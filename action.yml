@@ -72,7 +72,6 @@ runs:
     - name: Install Poetry
       shell: bash
       run: |
-        echo "::notice::Installing Poetry..."
         if ! [[ -x "$(command -v poetry)" ]]; then
           echo "$POETRY_HOME/bin" >> $GITHUB_PATH
           curl -sSL https://install.python-poetry.org | python -
@@ -86,7 +85,6 @@ runs:
     - name: Configure Credentials
       shell: bash
       run: |
-        echo "::notice::Configuring credentials..."
         if [[ "${{ inputs.repo }}" == "pypi" ]]; then
           poetry config repositories.publish https://upload.pypi.org/legacy/
         elif [[ "${{ inputs.repo }}" == "testpypi" ]]; then
@@ -105,12 +103,10 @@ runs:
       shell: bash
       if: ${{ inputs.build == 'true' }}
       run: |
-        echo "::notice::Building package..."
         poetry install --only ${{ inputs.dependencies }} --extras ${{ inputs.extras }}
         poetry build --format ${{ inputs.build-format }}
 
     - name: Publish
       shell: bash
       run: |
-        echo "::notice::Publishing package..."
         poetry publish --repository publish
