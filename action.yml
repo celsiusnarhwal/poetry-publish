@@ -96,7 +96,7 @@ runs:
 
     - name: Build
       shell: bash
-      if: ${{ inputs.build == "true" }}
+      if: inputs.build == "true"
       run: |
         poetry install --only ${{ inputs.dependencies }} --extras ${{ inputs.extras }}
         poetry build --format ${{ inputs.build-format }}
