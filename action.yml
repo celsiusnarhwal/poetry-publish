@@ -84,12 +84,14 @@ runs:
       shell: bash
       run: |
         if [[ "${{ inputs.repo }}" == "pypi" ]]; then
-          poetry config repositories.publish https://upload.pypi.org/legacy/
+          repo="https://upload.pypi.org/legacy/"
         elif [[ "${{ inputs.repo }}" == "testpypi" ]]; then
-          poetry config repositories.publish https://test.pypi.org/legacy/
+          repo="https://test.pypi.org/legacy/"
         else
-          poetry config repositories.publish "${{ inputs.repo }}"
+          repo="${{ inputs.repo }}"
         fi
+        
+        poetry config repositories.publish "$repo"
         
         if [[ -n "${{ inputs.token }}" ]]; then
           poetry config pypi-token.publish "${{ inputs.token }}"
