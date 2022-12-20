@@ -119,5 +119,4 @@ runs:
 
     - name: Publish
       shell: bash
-      run: |
-        poetry publish --repository publish
+      run: poetry publish --repository publish
