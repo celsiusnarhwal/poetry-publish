@@ -20,13 +20,16 @@ inputs:
   username:
     description: The username to use for the publication repository.
     required: false
+    default: ""
   password:
     description: The password to use for the publication repository.
     required: false
+    default: ""
   token:
     description: |
       The token to use for the publication repository. If provided, this will be preferred over a username and password.
     required: false
+    default: ""
   build:
     description: Whether to build the package before publishing it. Defaults to "true".
     required: false
@@ -36,6 +39,7 @@ inputs:
       The format to build the package in. Must be either "sdist" or "wheel". Both formats will be built if this isn't
       specified.
     required: false
+    default: ""
   dependencies:
     description: |
       A space-separated list of dependency groups to install at build time. Groups not listed will not be installed.
@@ -47,21 +51,18 @@ inputs:
       A space-separated list of extras to install at build time. If "build" is "false", this option has no effect.
       Set this to "all" to install all extras.
     required: false
+    default: ""
 
 runs:
   using: composite
   steps:
-    - name: Validate Credentials
+    - name: Validate Inputs
       shell: bash
       run: |
-        if ! [[ -n "$USERNAME" || -n "$PASSWORD" ]] && [[ -z "$TOKEN" ]]; then
+        if ! [[ -n "${{ inputs.username }}" || -n "${{ inputs.password }}" ]] && [[ -z "${{ inputs.token }}" ]]; then
           echo "::error::You must provide either a username and password or a token."
           exit 1
         fi
-      env:
-        USERNAME: ${{ inputs.username }}
-        PASSWORD: ${{ inputs.password }}
-        TOKEN: ${{ inputs.token }}
 
     - name: Set Up Python
       uses: actions/setup-python@v4
@@ -89,29 +90,30 @@ runs:
         elif [[ "${{ inputs.repo }}" == "testpypi" ]]; then
           poetry config repositories.publish https://test.pypi.org/legacy/
         else
-          poetry config repositories.publish ${{ inputs.repo }}
+          poetry config repositories.publish "${{ inputs.repo }}"
         fi
         
         if [[ -n "${{ inputs.token }}" ]]; then
-          poetry config pypi-token.publish "$TOKEN"
+          poetry config pypi-token.publish "${{ inputs.token }}"
         else
-          poetry config http-basic.publish "$USERNAME" "$PASSWORD"
+          poetry config http-basic.publish "${{ inputs.username }}" "${{ inputs.password }}"
         fi
-      env:
-        USERNAME: ${{ inputs.username }}
-        PASSWORD: ${{ inputs.password }}
-        TOKEN: ${{ inputs.token }}
 
     - name: Build
       shell: bash
       if: ${{ inputs.build == 'true' }}
       run: |
-        poetry install --only "$DEPENDENCIES" --extras "$EXTRAS"
-        poetry build --format "$BUILD_FORMAT"
-      env:
-        DEPENDENCIES: ${{ inputs.dependencies }}
-        EXTRAS: ${{ inputs.extras }}
-        BUILD_FORMAT: ${{ inputs.build-format }}
+        poetry install --only ${{ inputs.dependencies }}
+        
+        if [[ -n "${{ inputs.extras }}" ]]; then
+          poetry install --extras ${{ inputs.extras }}
+        fi
+        
+        if [[ -z "${{ inputs.build-format }}" ]]; then
+          poetry build
+        else
+          poetry build --format ${{ inputs.build-format }}
+        fi
 
     - name: Publish
       shell: bash
