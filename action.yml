@@ -60,7 +60,7 @@ runs:
       shell: bash
       run: |
         if [[ ! (-n "${{ inputs.username }}" && -n "${{ inputs.password }}") || -n "${{ inputs.token }}" ]]; then
-          echo "You must provide either a username and password or a token."
+          echo "::error::You must provide either a username and password or a token."
           exit 1
         fi
 
