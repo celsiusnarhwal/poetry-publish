@@ -72,7 +72,7 @@ runs:
     - name: Install Poetry
       shell: bash
       run: |
-        if ! [[ -x "$(command -v poetry)" ]]; then
+        if ! [[ -x "$(command -v poetry)" || -n "$POETRY_VERSION" ]]; then
           curl -sSL https://install.python-poetry.org | python -
         else
           echo "Skipping Poetry installation because it is already installed."
