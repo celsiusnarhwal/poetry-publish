@@ -1,4 +1,4 @@
-name: Publish with Poetry
+name: Publish With Poetry
 description: Publish a Python package with Poetry
 
 inputs:
@@ -73,14 +73,12 @@ runs:
       shell: bash
       run: |
         if ! [[ -x "$(command -v poetry)" ]]; then
-          echo "$POETRY_HOME/bin" >> $GITHUB_PATH
           curl -sSL https://install.python-poetry.org | python -
         else
           echo "Skipping Poetry installation because it is already installed."
         fi
       env:
         POETRY_VERSION: ${{ inputs.poetry-version }}
-        POETRY_HOME: ${{ github.workspace }}/.poetry
 
     - name: Configure Credentials
       shell: bash
@@ -105,7 +103,9 @@ runs:
       run: |
         poetry install --only ${{ inputs.dependencies }}
         
-        if [[ -n "${{ inputs.extras }}" ]]; then
+        if [[ "${{ inputs.extras }}" == "all" ]]; then
+          poetry install --extras all
+        elif [[ -n "${{ inputs.extras }}" ]]; then
           poetry install --extras ${{ inputs.extras }}
         fi
         
