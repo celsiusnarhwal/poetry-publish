@@ -1,0 +1,107 @@
+name: Publish with Poetry
+description: Publish a Python package with Poetry
+
+inputs:
+  python-version:
+    description: |
+      The version of Python to use. If you don't provide this, the action will use whatever version is in
+      $PATH. Poetry requires Python 3.7 or later.
+    required: false
+  poetry-version:
+    description: | 
+      The version of Poetry to use. If you don't provide this, the action will use the version of Poetry
+      in $PATH if one exists and install the latest stable version of Poetry otherwise.
+    required: false
+  repo:
+    description: |
+      The repository to publish to. Must be either "pypi", "testpypi", or an appropriate URL. Defaults to "pypi".
+    required: false
+    default: "pypi"
+  username:
+    description: The username to use for the publication repository.
+    required: false
+    default: ""
+  password:
+    description: The password to use for the publication repository.
+    required: false
+    default: ""
+  token:
+    description: |
+      The token to use for the publication repository. If provided, this will be preferred over a username and password.
+    required: false
+    default: ""
+  build:
+    description: Whether to build the package before publishing it. Defaults to "true".
+    required: false
+    default: "true"
+  build-format:
+    description: |
+      The format to build the package in. Must be either "sdist" or "wheel". Both formats will be built if this isn't
+      specified.
+    required: false
+    default: ""
+  dependencies:
+    description: |
+      A space-separated list of dependency groups to install at build time. Groups not listed will not be installed.
+      If "build" is "false", this option has no effect. Defaults to "main".
+    required: false
+    default: "main"
+  extras:
+    description: |
+      A space-separated list of extras to install at build time. If "build" is "false", this option has no effect.
+      Set this to "all" to install all extras.
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Validate Inputs
+      shell: bash
+      run: |
+        if [[ ! (-n "${{ inputs.username }}" && -n "${{ inputs.password }}") || -n "${{ inputs.token }}" ]]; then
+          echo "You must provide either a username and password or a token."
+          exit 1
+        fi
+
+    - name: Install Poetry
+      shell: bash
+      run: |
+        if ! [[ -x "$(command -v poetry)" ]]; then
+          echo "$POETRY_HOME/bin" >> $GITHUB_PATH
+          curl -sSL https://install.python-poetry.org | python -
+        else
+          echo "Skipping Poetry installation because it is already installed."
+        fi
+      env:
+        POETRY_VERSION: ${{ inputs.poetry-version }}
+        POETRY_HOME: ${{ github.workspace }}/.poetry
+
+    - name: Configure Credentials
+      shell: bash
+      run: |
+        if [[ "${{ inputs.repo }}" == "pypi" ]]; then
+          poetry config repositories.publish https://upload.pypi.org/legacy/
+        elif [[ "${{ inputs.repo }}" == "testpypi" ]]; then
+          poetry config repositories.publish https://test.pypi.org/legacy/
+        else
+          poetry config repositories.publish ${{ inputs.repo }}
+        fi
+        
+        if [[ -n "${{ inputs.token }}" ]]; then
+          poetry config pypi-token.publish ${{ inputs.token }}
+        else
+          poetry config http-basic.publish ${{ inputs.username }} ${{ inputs.password }}
+        fi
+
+    - name: Build
+      shell: bash
+      if: ${{ inputs.build == "true" }}
+      run: |
+        poetry install --only ${{ inputs.dependencies }} --extras ${{ inputs.extras }}
+        poetry build --format ${{ inputs.build-format }}
+
+    - name: Publish
+      shell: bash
+      run: |
+        poetry publish --repository publish
