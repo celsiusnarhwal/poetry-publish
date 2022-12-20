@@ -59,7 +59,7 @@ runs:
     - name: Validate Inputs
       shell: bash
       run: |
-        if [[ (-z "${{ inputs.username }}" && -z "${{ inputs.password }}") || -z "${{ inputs.token }}" ]]; then
+        if ! [[ -n "${{ inputs.username }}" && -n "${{ inputs.password }}" ]] || [[ -z "${{ inputs.token }}" ]]; then
           echo "::error::You must provide either a username and password or a token."
           exit 1
         fi
