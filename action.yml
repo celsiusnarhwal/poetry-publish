@@ -39,7 +39,7 @@ inputs:
       The format to build the package in. Must be either "sdist" or "wheel". Both formats will be built if this isn't
       specified.
     required: false
-    default: ""
+    default: """"
   dependencies:
     description: |
       A space-separated list of dependency groups to install at build time. Groups not listed will not be installed.
@@ -51,7 +51,7 @@ inputs:
       A space-separated list of extras to install at build time. If "build" is "false", this option has no effect.
       Set this to "all" to install all extras.
     required: false
-    default: ""
+    default: """"
 
 runs:
   using: composite
@@ -64,7 +64,7 @@ runs:
           exit 1
         fi
 
-    - name: Install Python
+    - name: Set Up Python
       uses: actions/setup-python@v4
       with:
         python-version: ${{ inputs.python-version }}
