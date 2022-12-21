@@ -37,7 +37,7 @@ steps:
     uses: celsiusnarhwal/poetry-publish@v1
     with:
       python-version: 3.11
-      poetry-version: 1.3.3
+      poetry-version: 1.3.1
       token: ${{ secrets.PYPI_TOKEN }}
       build: true
 ```
