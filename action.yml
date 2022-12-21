@@ -1,6 +1,10 @@
 name: Publish With Poetry
 description: Publish a Python package with Poetry
 
+branding:
+  icon: package
+  color: gray-dark
+
 inputs:
   python-version:
     description: |
