@@ -31,7 +31,7 @@ steps:
     uses: actions/checkout@v3
 
   - name: Publish Package
-    uses: celsiusnarhwal/poetry-publish@v1
+    uses: celsiusnarhwal/poetry-publish@v2
     with:
       python-version: 3.11
       poetry-version: 1.3.1
