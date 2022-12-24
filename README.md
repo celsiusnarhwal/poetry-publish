@@ -5,7 +5,7 @@ This GitHub Action publishes a [Poetry](https://python-poetry.org/) project to a
 ## Features
 
 - Built-in support for [PyPI](https://pypi.org) and [TestPyPI](https://test.pypi.org)
-- Support for both username/passord and token authentication
+- Support for both username/password and token authentication
 - Makes no assumptions about whether Python or Poetry are already installed
 
 ## Usage
