@@ -44,18 +44,6 @@ inputs:
       specified.
     required: false
     default: ""
-  dependencies:
-    description: |
-      A space-separated list of dependency groups to install at build time. Groups not listed will not be installed.
-      If "build" is "false", this option has no effect. Defaults to "main".
-    required: false
-    default: "main"
-  extras:
-    description: |
-      A space-separated list of extras to install at build time. If "build" is "false", this option has no effect.
-      Set this to "all" to install all extras.
-    required: false
-    default: ""
 
 runs:
   using: composite
@@ -76,7 +64,7 @@ runs:
     - name: Install Poetry
       shell: bash
       run: |
-        if ! [[ -x "$(command -v poetry)" || -n "$POETRY_VERSION" ]]; then
+        if  [[ ! -x "$(command -v poetry)" || -n "$POETRY_VERSION" ]]; then
           curl -sSL https://install.python-poetry.org | python -
         else
           echo "Skipping Poetry installation because it is already installed."
@@ -107,13 +95,6 @@ runs:
       shell: bash
       if: ${{ inputs.build == 'true' }}
       run: |
-        poetry install --only ${{ inputs.dependencies }}
-        
-        if [[ "${{ inputs.extras }}" == "all" ]]; then
-          poetry install --all-extras
-        elif [[ -n "${{ inputs.extras }}" ]]; then
-          poetry install --extras ${{ inputs.extras }}
-        fi
         
         if [[ -z "${{ inputs.build-format }}" ]]; then
           poetry build

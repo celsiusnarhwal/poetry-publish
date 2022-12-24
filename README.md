@@ -6,7 +6,6 @@ This GitHub Action publishes a [Poetry](https://python-poetry.org/) project to a
 
 - Built-in support for [PyPI](https://pypi.org) and [TestPyPI](https://test.pypi.org)
 - Support for both username/passord and token authentication
-- Customizable build process
 - Makes no assumptions about whether Python or Poetry are already installed
 
 ## Usage
@@ -23,8 +22,6 @@ This GitHub Action publishes a [Poetry](https://python-poetry.org/) project to a
 | `token`          | No[^2]        | The token to use for the publication repository. If provided, this will be preferred over a username and password.                                                                   | ""          |
 | `build`          | No            | Whether to build the package before publishing it. Defaults to "true".                                                                                                               | true        |
 | `build-format`   | No            | The format to build the package in. Must be either "sdist" or "wheel". Both formats will be built if this isn't specified.                                                           | ""          |
-| `dependencies`   | No            | A space-separated list of dependency groups to install at build time. Groups not listed will not be installed. If `build` is "false", this option has no effect. Defaults to "main". | main        |
-| `extras`         | No            | A space-separated list of extras to install at build time. If `build` is "false", this option has no effect. Set this to "all" to install all extras.                                | ""          |
 
 ### Example
 
