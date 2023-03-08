@@ -6,7 +6,7 @@ Publish With Poetry adheres to [semantic versioning](https://semver.org/spec/v2.
 
 ## <a name="2-0-3">[2.0.3] - 2023-03-08</a>
 
-## Changed
+### Changed
 
 - The `token` input now defaults to `${{ secrets.PYPI_TOKEN }}`.
 
