@@ -12,13 +12,13 @@ inputs:
       $PATH. Poetry requires Python 3.7 or later.
     required: false
   poetry-version:
-    description: | 
+    description: |
       The version of Poetry to use. If you don't provide this, the action will use the version of Poetry
       in $PATH if one exists and install the latest stable version of Poetry otherwise.
     required: false
   repo:
     description: |
-      The repository to publish to. Must be either "pypi", "testpypi", or an appropriate URL. Defaults to "pypi".
+      The repository to publish to. Must be either "pypi", "testpypi", or an appropriate URL.
     required: false
     default: "pypi"
   username:
@@ -33,9 +33,9 @@ inputs:
     description: |
       The token to use for the publication repository. If provided, this will be preferred over a username and password.
     required: false
-    default: ""
+    default: ${{ secrets.PYPI_TOKEN }}
   build:
-    description: Whether to build the package before publishing it. Defaults to "true".
+    description: Whether to build the package before publishing it.
     required: false
     default: "true"
   build-format:
@@ -82,9 +82,9 @@ runs:
         else
           repo="${{ inputs.repo }}"
         fi
-        
+
         poetry config repositories.publish "$repo"
-        
+
         if [[ -n "${{ inputs.token }}" ]]; then
           poetry config pypi-token.publish "${{ inputs.token }}"
         else
@@ -95,7 +95,7 @@ runs:
       shell: bash
       if: ${{ inputs.build == 'true' }}
       run: |
-        
+
         if [[ -z "${{ inputs.build-format }}" ]]; then
           poetry build
         else

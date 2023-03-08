@@ -13,7 +13,7 @@ This GitHub Action publishes a [Poetry](https://python-poetry.org/) project to a
 ### Inputs
 
 | **Name**         | **Required?** | **Description**                                                                                                                                                                      | **Default** |
-|------------------|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+| ---------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | `python-version` | No[^1]        | The version of Python to use. If you don't provide this, the action will use whatever version is in $PATH. Poetry requires Python 3.7 or later.                                      | None        |
 | `poetry-version` | No            | The version of Poetry to use. If you don't provide this, the action will use the version of Poetry in $PATH if one exists and install the latest stable version of Poetry otherwise. | None        |
 | `repo`           | No            | The repository to publish to. Must be either "pypi", "testpypi", or an appropriate URL. Defaults to "pypi".                                                                          | pypi        |
@@ -27,7 +27,7 @@ This GitHub Action publishes a [Poetry](https://python-poetry.org/) project to a
 
 ```yaml
 steps:
-  - name: Checkout Repository  # You must checkout your repository first.
+  - name: Checkout Repository # You must checkout your repository first.
     uses: actions/checkout@v3
 
   - name: Publish Package
@@ -44,9 +44,11 @@ steps:
 Publish With Poetry is licensed under
 the [MIT License](https://github.com/celsiusnarhwal/poetry-publish/blob/main/LICENSE.md).
 
-[^1]: *Some* version of Python comes preinstalled on all GitHub-hosted runners, but it's best practice to explicitly
-specify one that you know is compatible with both Poetry and your project. Behind the scenes, this action uses
-[actions/setup-python](https://github.com/actions/setup-python).
+[^1]:
+    _Some_ version of Python comes preinstalled on all GitHub-hosted runners, but it's best practice to explicitly
+    specify one that you know is compatible with both Poetry and your project. Behind the scenes, this action uses
+    [actions/setup-python](https://github.com/actions/setup-python).
 
-[^2]: `username`, `password`, and `token` are defined as optional so you can choose how to authenticate to the
-publication repository. You must provide either a username and password or a token or the action will fail.
+[^2]:
+    `username`, `password`, and `token` are defined as optional so you can choose how to authenticate to the
+    publication repository. You must provide either a username and password or a token or the action will fail.
