@@ -33,7 +33,7 @@ inputs:
     description: |
       The token to use for the publication repository. If provided, this will be preferred over a username and password.
     required: false
-    default: ${{ secrets.PYPI_TOKEN }}
+    default: ""
   build:
     description: Whether to build the package before publishing it.
     required: false
