@@ -73,12 +73,13 @@ runs:
       run: |
         import os
         
-        open(os.getenv("GITHUB_ENV", "w")).write(
+        print(
             "REPO_URL=" +
             {
                 "pypi": "https://upload.pypi.org/legacy/",
                 "testpypi": "https://test.pypi.org/legacy/",
-            }.get(os.getenv("INPUT_REPO"), os.getenv("INPUT_REPO"))
+            }.get(os.getenv("INPUT_REPO"), os.getenv("INPUT_REPO")),
+            file=open(os.getenv("GITHUB_ENV"), "a"),
         )
       env:
         INPUT_REPO: ${{ inputs.repo }}
