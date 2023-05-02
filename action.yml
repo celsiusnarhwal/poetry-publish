@@ -80,6 +80,8 @@ runs:
                 "testpypi": "https://test.pypi.org/legacy/",
             }.get(os.getenv("INPUT_REPO"), os.getenv("INPUT_REPO"))
         )
+      env:
+        INPUT_REPO: ${{ inputs.repo }}
 
     - name: Build
       shell: bash
