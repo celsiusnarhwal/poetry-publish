@@ -4,9 +4,11 @@ All notable changes to Publish With Poetry will be documented here. Breaking cha
 
 Publish With Poetry adheres to [semantic versioning](https://semver.org/spec/v2.0.0).
 
-## <a name="2-0-3">[2.0.3] - 2023-03-08</a>
+## <a name="2-0-4">[2.0.4] - 2023-05-02</a>
 
-### Changed
+No user-facing changes are introduced in this release.
+
+## <a name="2-0-3">[2.0.3] - 2023-03-08</a>
 
 No user-facing changes are introduced in this release.
 
