@@ -45,14 +45,12 @@ runs:
   using: composite
   steps:
     - name: Validate Inputs
-      shell: python
+      shell: bash
       run: |
-        import os
-        import sys
-          
-        if not os.getenv("INPUT_TOKEN") and not (os.getenv("INPUT_USERNAME") and os.getenv("INPUT_PASSWORD")):
-            print("You must provide either a token or a username and password.", file=sys.stderr)
-            sys.exit(1)
+        if ! [[ -n "${{ inputs.username }}" || -n "${{ inputs.password }}" ]] && [[ -z "${{ inputs.token }}" ]]; then
+          echo "::error::You must provide either a username and password or a token."
+          exit 1
+        fi
 
     - name: Set Up Python
       uses: actions/setup-python@v4
